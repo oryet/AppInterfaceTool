@@ -55,6 +55,12 @@ def frame_head_process(s):
           'Payload': ''
           }
 
+    s = s.replace(' ', '')
+    s = s.replace(':', '')
+    s = s.replace(';', '')
+    s = s.replace('：', '')
+    s = s.replace('；', '')
+
     if len(s) < 16:
         at['err'] = 'frame len error'
         return at
@@ -80,7 +86,8 @@ def frame_head_process(s):
     # 消息发送方名称，字符串，以0结尾，命名规范见5.2
     end_source = s.find('00')
     if end_source > 0:
-        at['SOURCE'] = s[:end_source]
+        b = bytes.fromhex(s[:end_source])
+        at['SOURCE'] = str(b, encoding="utf-8")
     else:
         at['err'] = 'SOURCE err'
         return at
@@ -90,7 +97,8 @@ def frame_head_process(s):
     # 消息接收方名称，字符串，以0结尾，命名规范见5.2
     end_dest = s.find('00')
     if end_dest > 0:
-        at['DESTINATION'] = s[:end_dest]
+        b = bytes.fromhex(s[:end_dest])
+        at['DESTINATION'] = str(b, encoding="utf-8")
     else:
         at['err'] = 'DESTINATION err'
         return at
@@ -120,8 +128,8 @@ def frame_head_process(s):
 
 
 if __name__ == '__main__':
-    # s = '51 34 12 00 F0 49 2D 6D 79 41 70 70 31 00 49 2D 73 6D 69 4F 53 00 10 00 01 00 19 00 00 00 03 08 49 2D 6D 79 41 70 70 31 00 00 00 00 01 07 E3 09 03 00 00 00'
-    # s = s.replace(' ', '')
+    s = '51 34 12 00 F0 49 2D 6D 79 41 70 70 31 00 49 2D 73 6D 69 4F 53 00 10 00 01 00 19 00 00 00 03 08 49 2D 6D 79 41 70 70 31 00 00 00 00 01 07 E3 09 03 00 00 00'
+    s = s.replace(' ', '')
 
     # 01 								# 优先级 = 0，PRM = 1
     # 00 00 							# 序号 = 0
@@ -137,15 +145,13 @@ if __name__ == '__main__':
     # 00 00 00 01 						# 版本信息 = 00000001
     # 07 E3 09 03 00 00 00				# 发布日期 = 2019年9月3日 00:00:00
 
-    while(1):
-        s = input("请输入报文: ")
-        s = s.replace(' ', '')
-        s = s.replace(':', '')
-        s = s.replace(';', '')
-        s = s.replace('：', '')
-        s = s.replace('；', '')
-        # print(s)
-        at = frame_head_process(s)
-        pt = idParsing(at)
-        print(at)
-        print(pt)
+    s = s.replace(' ', '')
+    s = s.replace(':', '')
+    s = s.replace(';', '')
+    s = s.replace('：', '')
+    s = s.replace('；', '')
+    # print(s)
+    at = frame_head_process(s)
+    pt = idParsing(at)
+    print(at)
+    print(pt)

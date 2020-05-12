@@ -83,12 +83,13 @@ def fn0010(Payload):
     # 	组件信息		MQT_PLUGIN
     # }
     # ACK ∷= bool
-    ProcessNum = pub._strReverse(Payload[:8])
+    ProcessNum = Payload[:8]
     Payload = Payload[8:]
 
     n = int(Payload[:2], 16)
     n = (n + 1) * 2
-    ComponentName = Payload[2:n]
+    b = bytes.fromhex(Payload[2:n])
+    ComponentName = str(b, encoding="utf-8")
     Payload = Payload[n:]
 
     SubEvents = Payload[:2]
