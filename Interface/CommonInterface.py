@@ -32,3 +32,5 @@ def CommInterface(iop, at):
         pass
     elif iop == '0014':  # 0014H：错误信息
         pass
+
+    return {}
