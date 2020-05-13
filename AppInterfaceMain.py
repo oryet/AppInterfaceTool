@@ -36,7 +36,10 @@ class mainWin(QMainWindow, Ui_MainWindow):
 
         # 解析
         at = frame_head_process(s)
-        pt = idParsing(at)
+        if 'err' not in at:
+            pt = idParsing(at)
+        else:
+            pt = {}
 
         # 输出到显示文本框
         show = ''

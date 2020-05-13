@@ -117,8 +117,18 @@ def frame_head_process(s):
         return at
     # MSG’s—Length  N
     # 消息有效载荷长度，采用可变长度编码（A-XDR）
-    at['Length'] = int(s[:2], 16)
-    s = s[2:]
+    l = int(s[:2], 16)
+    if l & 0x80:
+        ln = l & 0x7F
+        ln = ln * 2 + 2
+        at['Length'] = int(s[2:ln], 16)
+    else:
+        ln = 2
+        at['Length'] = l
+    s = s[ln:]
+
+    if len(s) != at['Length'] * 2:
+        at['err'] = 'Payload Length error'
 
     # MSG’s—Payload N
     # 有效载荷，即消息数据单元（定义见附录）
