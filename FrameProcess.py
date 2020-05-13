@@ -121,7 +121,10 @@ def frame_head_process(s):
     if l & 0x80:
         ln = l & 0x7F
         ln = ln * 2 + 2
-        at['Length'] = int(s[2:ln], 16)
+        try:
+            at['Length'] = int(s[2:ln], 16)
+        except:
+            at['Length'] = 0
     else:
         ln = 2
         at['Length'] = l
